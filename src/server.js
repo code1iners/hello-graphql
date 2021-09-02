@@ -1,3 +1,4 @@
+require("dotenv").config();
 import { ApolloServer } from "apollo-server-express";
 import { ApolloServerPluginDrainHttpServer, gql } from "apollo-server-core";
 import express from "express";
@@ -5,18 +6,8 @@ import http from "http";
 import schema from "./schema";
 
 async function startApolloServer() {
-  const typeDefs = gql`
-    type Query {
-      hello: String
-    }
-  `;
-
-  const resolvers = {
-    Query: {
-      hello: () => "hello",
-    },
-  };
-
+  const PORT = process.env.PORT;
+  console.log(PORT);
   // Required logic for integrating with Express
   const app = express();
   const httpServer = http.createServer(app);
@@ -39,8 +30,10 @@ async function startApolloServer() {
   });
 
   // Modified server startup
-  await new Promise((resolve) => httpServer.listen({ port: 4000 }, resolve));
-  console.log(`🚀 Server ready at http://localhost:4000${server.graphqlPath}`);
+  await new Promise((resolve) => httpServer.listen({ port: PORT }, resolve));
+  console.log(
+    `🚀 Server ready at http://localhost:${PORT}${server.graphqlPath}`
+  );
 }
 
 startApolloServer();
